@@ -1,0 +1,213 @@
+<p-toast></p-toast>
+<div class="surface-0 flex justify-content-center">
+    <div id="home" class="landing-wrapper overflow-hidden">
+        <div
+            class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
+            <a class="flex align-items-center" href="#">
+                <img src="assets/layout/images/logo.svg" alt="Logo" height="50" class="mr-0 lg:mr-2">
+                <span *ngIf="infoShop" class="text-900 font-medium text-2xl line-height-3 mr-8">{{
+                    infoShop.name }}</span>
+
+            </a>
+            <a pRipple class="cursor-pointer block lg:hidden text-700" pStyleClass="@next" enterClass="hidden"
+                leaveToClass="hidden" [hideOnOutsideClick]="true">
+                <i class="pi pi-bars text-4xl"></i>
+            </a>
+            <div class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
+                style="top:85%">
+                <ul
+                    class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
+                    <li>
+                        <a routerLink="/" pRipple class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Trang chủ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a *ngIf="isLoggedIn" [routerLink]="['/auth/gio-hang']" fragment="features" pRipple
+                            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Giỏ hàng</span>
+                        </a>
+
+                        <!-- Nếu chưa đăng nhập -->
+                        <a *ngIf="!isLoggedIn" fragment="features" pRipple (click)="showLoginAlert()"
+                            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Giỏ hàng</span>
+                        </a>
+
+                    </li>
+                    
+                    <li>
+                        <a *ngIf="isAdmin == 'ROLE_ADMIN'" (click)="showDialogInfoShop()" fragment="features" pRipple
+                            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Admin</span>
+                        </a>
+                    </li>
+                </ul>
+                <div
+                    class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
+                    <!-- Nếu chưa đăng nhập -->
+                    <div *ngIf="!isLoggedIn">
+                        <button pButton pRipple label="Đăng nhập"
+                            class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"
+                            routerLink="/auth/dang-nhap">
+                        </button>
+
+                        <button pButton pRipple label="Đăng ký"
+                            class="p-button-rounded border-none ml-5 font-light line-height-2 bg-blue-500 text-white"
+                            routerLink="/auth/dang-ky">
+                        </button>
+                    </div>
+
+                    <!-- Nếu đã đăng nhập -->
+                    <div *ngIf="isLoggedIn">
+                        <button pButton pRipple label="Xin chào {{ fullname }}"
+                            class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500">
+                        </button>
+                        <button pButton pRipple label="Đăng xuất"
+                            class="p-button-text p-button-rounded border-none font-light line-height-2 text-red-500 ml-3"
+                            (click)="logout()">
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="py-4 px-4 lg:px-8 mt-5 mx-0 lg:mx-8">
+            <section class="cta-banner cd-padding-sm">
+                <div class="cta-banner__grid">
+                    <div class="cta-banner__content">
+                        <h1 class="cta-banner__title">{{infoShop.description}}</h1>
+
+                        <p class="cta-banner__description">Thời gian mở cửa {{ infoShop.openTime }}</p>
+
+                        <div class="cta-banner__btns first">
+                            <a [routerLink]="[]" fragment="datmonan" class="button2">Đặt món ngay</a>
+                        </div>
+                    </div>
+
+                    <figure>
+                        <img class="cta-banner__img cd-radius-md" src="assets/demo/images/banner/banner.jpg"
+                            alt="Banner">
+                    </figure>
+                </div>
+            </section>
+        </div>
+
+
+        <div class="container mt-5">
+            <div class="row justify-content-center" id="datmonan">
+                <div class="col-12 text-center mb-4">
+                    <h2 class="text-900 font-normal"><b>Danh sách các món ăn</b></h2>
+                </div>
+                <div class="col-md-4 mb-4 d-flex align-items-stretch"
+                    *ngFor="let food of foods | paginate: { itemsPerPage: pageSize, currentPage: page }">
+                    <div class="card w-100">
+                        <img [src]="backendApiUrl + '/api/v1/project/auth/' + food.imageUrl"
+                            class="card-img-top img-fluid" alt="Food Image" style="height: 200px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ food.name }}</h5>
+                            <p class="card-text text-danger fw-bold">{{ food.price | number:'1.0-2' }} VND</p>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                <button class="btn btn-info" (click)="viewDetails(food)">Xem chi tiết</button>
+                                <button class="btn btn-primary" (click)="addToCart(food)">Thêm vào giỏ hàng</button>
+                            </div>
+                        </div>
+                        <div *ngIf="showDetailModal" class="modal show">
+                            <div class="modal-content">
+                                <img [src]="backendApiUrl +'/api/v1/project/auth/' + selectedFood?.imageUrl"
+                                    style="width: 100%; height: 200px;" class="card-img-top" alt="Food Image">
+                                <h2>{{ selectedFood?.name }}</h2>
+                                <p><strong>Giá:</strong> {{ selectedFood?.price | number:'1.0-2' }} VND</p>
+                                <p><strong>Mô tả:</strong> {{ selectedFood?.description }}</p>
+
+                                <button class="btn btn-danger" (click)="closeDetail()">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center mt-4">
+                        <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-4 px-4 mx-0 mt-8 lg:mx-8">
+            <div class="grid justify-content-between">
+                <div *ngIf="infoShop" class="col-12 md:col-6" style="margin-top:-1.5rem;">
+                    <a href="#"
+                        class="flex flex-wrap align-items-center justify-content-center md:justify-content-start md:mb-0 mb-3 cursor-pointer">
+                        <img src="assets/layout/images/logo.svg" alt="footer sections" width="50" height="50"
+                            class="mr-2">
+                        <h4 class="font-medium text-3xl text-900">{{ infoShop.name }}</h4>
+                    </a>
+                    <p class="line-height-3 text-xl block cursor-pointer mb-2 text-700">Thời gian mở cửa: {{
+                        infoShop.openTime }}</p>
+                    <p class="line-height-3 text-xl block cursor-pointer mb-2 text-700">Địa chỉ: {{ infoShop.adress }}
+                    </p>
+                </div>
+
+                <div class="col-12 md:col-10 lg:col-6">
+                    <div class="grid text-center md:text-left">
+                        <div class="col-12 md:col-6">
+                            <h4 class="font-medium text-2xl line-height-3 mb-3 text-900">Canteen</h4>
+                            <p class="line-height-3 text-xl block cursor-pointer mb-2 text-700">Email:
+                                {{infoShop.email}}</p>
+                            <p class="line-height-3 text-xl block cursor-pointer mb-2 text-700">SĐT: {{infoShop.phone}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card flex justify-center">
+    <p-dialog [(visible)]="showInfoShop" [maximizable]="true" [resizable]="false"
+        [contentStyle]="{'overflow': 'scroll'}" [responsive]="true" [draggable]="false" header="Thông tin của hàng"
+        [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '35vw'}"
+        [modal]="true">
+        <ng-template pTemplate="content">
+            <div class="grid">
+                <div class="field col-12 lg:col-6">
+                    <label for="time" style="font-weight: bold">Tên cửa hàng</label>
+                    <input id="time" pTooltip="Tên người đặt tour" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.name" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="name" style="font-weight: bold">Địa chỉ</label>
+                    <input id="name" pTooltip="Tên người đặt tour" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.adress" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="name" style="font-weight: bold">Email</label>
+                    <input id="name" pTooltip="Tên người đặt tour" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.email" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="departure" style="font-weight: bold">Số điện thoại</label>
+                    <input id="name" pTooltip="Số điện thoại" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.phone" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="departure" style="font-weight: bold">Mô tả</label>
+                    <input id="name" pTooltip="Mô tả" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.description" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="departure" style="font-weight: bold">Thời gian hoạt động</label>
+                    <input id="name" pTooltip="Thời gian hoạt động" tooltipPosition="bottom" pInputText
+                        [(ngModel)]="infoShop.openTime" required autofocus />
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cập nhật thông tin" pTooltip="Cập nhật thông tin" (click)="infoShopUpdate()"
+                class="p-button-text"></button>
+        </ng-template>
+    </p-dialog>
+</div>

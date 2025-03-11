@@ -1,0 +1,21 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/logo.svg" alt="logo">
+        <span>Canteen Management</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+    
+        <button pButton pTooltip="Cập nhật thông tin tài khoản" tooltipPosition="left" pRipple type="button"
+        label="Đăng xuất" (click) = "logout()"
+        class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
+    </div>
+</div>

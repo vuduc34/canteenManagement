@@ -1,0 +1,100 @@
+<p-toast></p-toast>
+<app-loading *ngIf="loading"></app-loading>
+<div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="grid justify-content-center p-2 lg:p-0" style="min-width:80%">
+        <!-- <div class="col-12 mt-5 xl:mt-0 text-center">
+            <img src="assets/layout/images/images.png" alt="SOICT logo" class="mb-5" style="width:81px; height:60px;">                
+        </div> -->
+        <div class="col-12 xl:col-6"
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="h-full w-full m-0 py-7 px-4"
+                style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
+                <div class="text-center mb-5">
+                    <img src="assets/layout/images/logo.svg" alt="Image" height="50" class="mb-3">
+                    <div class="text-900 text-3xl font-medium mb-3">Đăng ký mới tài khoản</div>
+                </div>
+
+                <!-- jsdg -->
+                <form #signupForm="ngForm" (ngSubmit)="signup()" novalidate>
+                    <div class="w-full md:w-10 mx-auto">
+                        <!-- Họ và tên -->
+                        <label for="fullname" class="block text-900 text-xl font-medium mb-2">Họ và tên</label>
+                        <input id="fullname" type="text" placeholder="Họ và tên" [(ngModel)]="fullname" name="fullname"
+                            #fullnameCtrl="ngModel" required minlength="3" pInputText class="w-full mb-3"
+                            style="padding:1rem;">
+                        <div *ngIf="fullnameCtrl.invalid && fullnameCtrl.touched" class="text-red-500">
+                            <p *ngIf="fullnameCtrl.errors?.['required']">Họ và tên không được để trống.</p>
+                            <p *ngIf="fullnameCtrl.errors?.['minlength']">Họ và tên phải có ít nhất 3 ký tự.</p>
+                        </div>
+
+                        <!-- Username -->
+                        <label for="userName" class="block text-900 text-xl font-medium mb-2">Username</label>
+                        <input id="userName" type="text" placeholder="Username" [(ngModel)]="userName" name="userName"
+                            #userNameCtrl="ngModel" required minlength="4" pInputText class="w-full mb-3"
+                            style="padding:1rem;">
+                        <div *ngIf="userNameCtrl.invalid && userNameCtrl.touched" class="text-red-500">
+                            <p *ngIf="userNameCtrl.errors?.['required']">Username không được để trống.</p>
+                            <p *ngIf="userNameCtrl.errors?.['minlength']">Username phải có ít nhất 4 ký tự.</p>
+                        </div>
+
+                        <!-- Email -->
+                        <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
+                        <input id="email" type="email" placeholder="abcd@gmail.com" [(ngModel)]="email" name="email"
+                            #emailCtrl="ngModel" required email pInputText class="w-full mb-3" style="padding:1rem;">
+                        <div *ngIf="emailCtrl.invalid && emailCtrl.touched" class="text-red-500">
+                            <p *ngIf="emailCtrl.errors?.['required']">Email không được để trống.</p>
+                            <p *ngIf="emailCtrl.errors?.['email']">Email không hợp lệ.</p>
+                        </div>
+
+                        <!-- Số điện thoại -->
+                        <label for="phoneNumber" class="block text-900 text-xl font-medium mb-2">Số điện thoại</label>
+                        <input id="phoneNumber" type="text" placeholder="Số điện thoại" [(ngModel)]="phoneNumber"
+                            name="phoneNumber" #phoneNumberCtrl="ngModel" required pattern="^(0[1-9][0-9]{8})$"
+                            pInputText class="w-full mb-3" style="padding:1rem;">
+                        <div *ngIf="phoneNumberCtrl.invalid && phoneNumberCtrl.touched" class="text-red-500">
+                            <p *ngIf="phoneNumberCtrl.errors?.['required']">Số điện thoại không được để trống.</p>
+                            <p *ngIf="phoneNumberCtrl.errors?.['pattern']">Số điện thoại không hợp lệ (bắt đầu bằng 0 và
+                                có 10 số).</p>
+                        </div>
+
+                        <!-- Mật khẩu -->
+                        <label for="passWord" class="block text-900 font-medium text-xl mb-2">Mật khẩu</label>
+                        <p-password id="passWord" [(ngModel)]="passWord" name="passWord" #passWordCtrl="ngModel"
+                            required minlength="8" placeholder="Mật khẩu" [toggleMask]="true"
+                            styleClass="w-full mb-3"></p-password>
+                        <div *ngIf="passWordCtrl.invalid && passWordCtrl.touched" class="text-red-500">
+                            <p *ngIf="passWordCtrl.errors?.['required']">Mật khẩu không được để trống.</p>
+                            <p *ngIf="passWordCtrl.errors?.['minlength']">Mật khẩu phải có ít nhất 8 ký tự.</p>
+                        </div>
+
+                        <!-- Xác nhận mật khẩu -->
+                        <label for="confirmPassWord" class="block text-900 font-medium text-xl mb-2">Xác nhận mật
+                            khẩu</label>
+                        <p-password id="confirmPassWord" [(ngModel)]="confirmPassWord" name="confirmPassWord"
+                            #confirmPassWordCtrl="ngModel" required placeholder="Xác nhận mật khẩu" [toggleMask]="true"
+                            styleClass="w-full mb-3"></p-password>
+                        <div *ngIf="confirmPassWordCtrl.invalid && confirmPassWordCtrl.touched" class="text-red-500">
+                            <p *ngIf="confirmPassWordCtrl.errors?.['required']">Xác nhận mật khẩu không được để trống.
+                            </p>
+                            <p *ngIf="confirmPassWord !== passWord">Mật khẩu xác nhận không khớp.</p>
+                        </div>
+
+                        <!-- Link đăng nhập -->
+                        <div class="flex align-items-center justify-content-between mb-5">
+                            <div class="flex align-items-center">
+                                <a class="font-medium no-underline ml-2 text-right cursor-pointer"
+                                    [routerLink]="['/auth/dang-nhap']" routerLinkActive="router-link-active"
+                                    style="color: var(--primary-color)">Đã có tài khoản? Đăng nhập ngay.</a>
+                            </div>
+                        </div>
+
+                        <!-- Nút Đăng ký -->
+                        <button pButton pRipple [disabled]="signupForm.invalid || confirmPassWord !== passWord"
+                            label="Đăng ký" class="w-full p-3 text-xl"></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

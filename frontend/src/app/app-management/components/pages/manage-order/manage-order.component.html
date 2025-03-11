@@ -1,0 +1,167 @@
+<div class = "card">
+    <div class="grid">
+        <p-toast></p-toast>
+        <p-confirmDialog [style]="{width: '20vw'}"></p-confirmDialog>
+        <app-loading *ngIf="loading"></app-loading>
+        <div class="text-center col-12" style="font-weight: bold; font-size: large;">Danh sách đơn hàng</div>
+        <div class="col-12">
+            <span style="display: block">All</span>
+            <p-checkbox [(ngModel)]="loadAllOrder" (onChange)="loadData()" [binary]="true"></p-checkbox>
+        </div>
+        <div class="col-12">
+            <p-table #dt1 [value]="listOrder" 
+                [globalFilterFields]="['id','code','name','status','email']" responsiveLayout="scroll" [rows]="10" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[20,30,50]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} bản ghi"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                                placeholder="Search keyword" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div>
+                                ID
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Tổng tiền
+                            </div>
+                        </th>
+                       
+                        <th>
+                            <div>
+                               Trạng thái
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Mã đơn
+                            </div>
+                        </th>
+                        <!-- <th>
+                            <div>
+                                Đơn vị cung cấp
+                                <p-columnFilter type="text" field="provider" display="menu"></p-columnFilter>
+                            </div>
+                        </th> -->
+                        <th>
+                            <div>
+                                Thời gian đặt
+                            </div>
+                        </th>
+                        <!-- <th>
+                            <div>
+                                Mã chuyến đi
+                                <p-columnFilter type="text" field="tourTripCode" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Trạng thái
+                                <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+                            </div>
+                        </th> -->
+
+                       
+                        <!-- <th style="width: 3rem">
+                        </th> -->
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                    <tr [class]="obj.hightlightClass" (click)="showOrderDetail(obj)">
+                       
+                        <td>{{obj.id}}</td>
+                        <!-- <td>{{obj.code}}</td> -->
+                        <td>{{obj.totalPrice  | number:'1.0-0'}} VND</td>
+                        <td>
+                            <p-tag value="Chưa xác nhận" *ngIf = "obj.status == 'unconfirmed'" severity="danger"></p-tag>
+                            <p-tag value="Đang chuẩn bị" *ngIf = "obj.status=='preparing'"></p-tag>
+                            <p-tag value="Đã hủy" *ngIf = "obj.status=='cancel'" severity="danger"></p-tag>
+                            <p-tag value="Đã chuẩn bị xong" *ngIf = "obj.status=='done'" severity="success"></p-tag>
+                            <p-tag value="Khách hàng không nhận hàng" *ngIf = "obj.status=='rejected'" severity="danger"></p-tag>
+                        </td>
+                        <td>{{obj.code}}</td>
+                        <td> {{obj.orderTime}}</td>
+                       
+                        <!-- <td>
+                           
+                            <button pButton pTooltip="Chi tiết đơn đặt hàng"  tooltipPosition="left" pRipple type="button"
+                                label="Chi tiết"
+                                class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
+                        </td> -->
+                    
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">Không có dữ liệu</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+
+    </div>
+</div>
+
+<p-dialog [(visible)]="isShowOrderDetail" [maximizable]="true" [resizable]="false"
+    [contentStyle]="{'overflow': 'scroll'}" [responsive]="true" [draggable]="false" header="Thông tin đơn hàng"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '35vw'}"
+    [modal]="true">
+
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <table *ngIf="listOrderDetail.length > 0;">
+                <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên món</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Thành tiền</th>
+                        <th>Mô tả</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of listOrderDetail">
+                        <td>
+                            <img [src]=" backendApiUrl +'/api/v1/project/auth/' + item.imageUrl"
+                                class="food-img" alt="Food Image">
+                        </td>
+                        <td>{{ item.foodName }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.foodPrice | number:'1.0-2' }} VND</td>
+                        <td>{{ item.price | number:'1.0-2' }} VND</td>
+                        <td>{{ item.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div class="text-center col-12" style="font-weight: bold; font-size: large;"> Thông tin đơn hàng</div> -->
+        
+           
+            
+        </div>
+            
+
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Xác nhận" *ngIf="orderSelected.status == 'unconfirmed'" (click)="confirmOrder()"  icon="pi pi-check-circle" class="p-button-text"></button>
+        <button pButton pRipple label="Hoàn thành" *ngIf="orderSelected.status == 'preparing'" (click)="doneOrder()"  icon="pi pi-save" class="p-button-text"></button>
+        <button pButton pRipple label="Hủy" *ngIf="orderSelected.status == 'unconfirmed'" (click) ="confirmCancel()" icon="pi pi-minus-circle"  class="p-button-text"></button>
+        <button pButton pRipple label="Khách hàng không lấy đơn" [disabled] ="checkTimeDifference(orderSelected.orderTime)" *ngIf="orderSelected.status == 'done'" (click) ="confirmReject()" icon="pi pi-minus-circle"  class="p-button-text"></button>
+    </ng-template>
+
+
+</p-dialog>

@@ -1,0 +1,236 @@
+<div class = "card">
+    <div class="grid">
+        <p-toast></p-toast>
+        <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+        <app-loading *ngIf="loading"></app-loading>
+        <div class="text-center col-12" style="font-weight: bold; font-size: large;">Danh sách thực đơn</div>
+        <p-toolbar styleClass="mb-4" class="col-12">
+            <ng-template pTemplate="left">
+                <div class="my-2">
+                    <button pButton pRipple label="Thêm món ăn mới" (click)="showCreateFood()" pTooltip="Thêm món ăn mới" icon="pi pi-plus"
+                        class="p-button-success mr-2" >
+                    </button>
+                </div>
+            </ng-template>
+
+        </p-toolbar>
+        <div class="col-12">
+            <p-table #dt1 [value]="listFood" 
+                [globalFilterFields]="['id','imageUrl', 'name','price','status']" responsiveLayout="scroll" [rows]="10" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} bản ghi"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                                placeholder="Nội dung tìm kiếm" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div>
+                                ID
+                                <p-columnFilter type="number" field="id" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Hình ảnh
+                                <p-columnFilter type="text" field="imageUrl" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                       
+                        <th>
+                            <div>
+                                Tên món ăn
+                                <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Giá
+                                <p-columnFilter type="text" field="price" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Trạng thái
+                                <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th style="width: 3rem">
+                        </th>
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                    <tr [class]="obj.hightlightClass">
+                        <td>{{obj.id}}</td>
+                        <td><img [src]="backendApiUrl +'/api/v1/project/auth/' + obj.imageUrl" alt="Food Image" width="100" height="100"></td>
+                        <td>{{obj.name}}</td>
+                        <td> {{ obj.price | number:'1.0-2' }} VND</td>
+                        <td>
+                            <p-tag value="Khả dụng" *ngIf="obj.status === 'available'" severity="success"></p-tag>
+                            <p-tag value="Không khả dụng" *ngIf="obj.status === 'unavailable'" severity="error"></p-tag>
+                        </td>
+
+                        <td>
+                           
+                            <button pButton pTooltip="Cập nhật thông tin món ăn" (click)="showDetailFood(obj)"  tooltipPosition="left" pRipple type="button"
+                                label="Cập nhật"
+                                class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
+                        </td>
+                    
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">Không có dữ liệu</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+
+    </div>
+</div>
+
+<p-dialog [(visible)]="isShowFoodDetail" [maximizable]="true" [resizable]="false"
+    [contentStyle]="{'overflow': 'scroll'}" [responsive]="true" [draggable]="false" header="Thông tin món ăn"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '35vw'}"
+    [modal]="true">
+
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="text-center col-12" style="font-weight: bold; font-size: large;"> Thông tin món ăn</div>
+        
+            <div class="field col-12 lg:col-2">
+                <label for="code" style="font-weight: bold;">Mã món ăn</label>
+                <p id="code">{{foodSelected.id}}</p>
+            </div>
+            <div class="field col-12 lg:col-5">
+                <label for="time" style="font-weight: bold;">Tên món ăn</label>
+                <input id="time" tooltipPosition="bottom" pInputText
+                [(ngModel)]="foodSelected.name"required autofocus placeholder="Món số 1" />
+            </div>
+
+            <div class="field col-12 lg:col-4">
+                <label for="status" style="font-weight: bold;">Trạng thái</label>
+                <p-dropdown id="foodStatus" [options]="status" [(ngModel)]="foodSelected.status"
+                    placeholder="Chọn trạng thái" optionLabel="name" optionValue="value">
+                </p-dropdown>
+            </div>
+
+            <div class="field col-12 lg:col-6">
+                <label for="foodPrice" style="font-weight: bold;">Giá</label>
+                <input id="foodPrice" type="number" pTooltip="Nhập giá món ăn" tooltipPosition="bottom" pInputText
+                    [(ngModel)]="foodSelected.price" required autofocus placeholder="Nhập giá (VND)" />
+            </div>
+            
+            <div class="field col-12 lg:col-6">
+                <label for="foodDescription" style="font-weight: bold;">Mô tả</label>
+                <input id="foodPrice" pTooltip="Nhập mô tả món ăn" tooltipPosition="bottom" pInputText
+                    [(ngModel)]="foodSelected.description" required placeholder="Nhập mô tả" />
+            </div>
+            
+            
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Xóa" pTooltip ="Xóa món ăn" (click)="confirmDelete()"   icon="pi pi-trash" class="p-button-text"></button>
+        <button pButton pRipple label="Cập nhật" (click)="updateFood()"  class="p-button-text"></button>
+        <button pButton pRipple label="Xong" (click)="isShowFoodDetail = false"  class="p-button-text"></button>
+       
+    </ng-template>
+
+
+</p-dialog>
+
+<p-dialog [(visible)]="isShowCreateFood" [maximizable]="true" [resizable]="false"
+   [responsive]="true" [draggable]="false" header="Thông tin món ăn"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '45vw'}"
+    [modal]="true">
+
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="text-center col-12" style="font-weight: bold; font-size: large;"> Thông tin món ăn</div>
+            
+            <div class="field col-12 lg:col-6">
+                <label for="time" style="font-weight: bold;">Tên món ăn</label>
+                <input id="time" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createFoodModel.name"required autofocus placeholder="Món số 1" />
+            </div>
+
+            <div class="field col-12 lg:col-6">
+                <label for="foodPrice" style="font-weight: bold;">Giá</label>
+                <input id="foodPrice" type="number" pTooltip="Nhập giá món ăn" tooltipPosition="bottom" pInputText
+                    [(ngModel)]="createFoodModel.price" required autofocus placeholder="Nhập giá (VND)" />
+            </div>
+
+            
+            <div class="field col-12 lg:col-6">
+                <label for="foodStatus" style="font-weight: bold;">Trạng thái</label>
+                <p-dropdown id="foodStatus" [options]="status" [(ngModel)]="createFoodModel.status"
+                    placeholder="Chọn trạng thái" optionLabel="name" optionValue="value">
+                </p-dropdown>
+            </div> 
+
+            <div class="field col-12 lg:col-6">
+                <label for="code" style="font-weight: bold;">Loại món ăn</label>
+                <p-dropdown id="code" [options]="listCategory" [(ngModel)]="categorySelected"
+                placeholder="Chọn loại món ăn"  optionLabel="name" optionValue="id"></p-dropdown>
+            </div>
+
+            <!-- <div class="field col-12 lg:col-6">
+                <label for="foodImage" style="font-weight: bold;">Hình ảnh</label>
+                
+                <input id="foodImage" type="file" pTooltip="Tải lên hình ảnh" tooltipPosition="bottom"
+                    (change)="onFileSelected($event)" accept="image/*" required />
+            
+                <img *ngIf="createFoodModel.imageUrl" [src]="'http://13.239.169.8:8080/api/v1/project/auth/' + createFoodModel.imageUrl"
+                    alt="Ảnh món ăn" style="margin-top: 10px; width: 100px; height: 100px; object-fit: cover;">
+            </div> -->
+            <div class="field col-12 lg:col-6">
+                <label for="foodImage" style="font-weight: bold;">Hình ảnh</label>
+            
+                <!-- Thiết kế ô tải file -->
+                <div class="upload-container">
+                    <input id="foodImage" type="file" (change)="onFileSelected($event)" accept="image/*" required />
+                    <label for="foodImage">Chọn hình ảnh</label>
+                </div>
+            
+                <!-- Hiển thị ảnh đã chọn -->
+                <!-- <div class="image-preview" *ngIf="createFoodModel.imageUrl">
+                    <img [src]="backendApiUrl +'/api/v1/project/auth/' + createFoodModel.imageUrl"
+                        alt="Ảnh món ăn">
+                </div> -->
+            </div>
+            <div class="field col-12 lg:col-6">
+                <label for="foodDescription" style="font-weight: bold;">Mô tả</label>
+                <input id="foodDescription" pTooltip="Nhập mô tả món ăn" tooltipPosition="bottom" pInputText
+                    [(ngModel)]="createFoodModel.description" required placeholder="Nhập mô tả" />
+            </div>
+            <div class="field col-12 image-container" *ngIf="createFoodModel.imageUrl" >
+                <p-image [src]="backendApiUrl +'/api/v1/project/auth/' + createFoodModel.imageUrl" alt="Image" width="250" [preview]="true" ></p-image>
+            </div>
+            
+
+        </div>
+            
+
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Tạo món ăn" pTooltip ="Tạo món ăn" (click)="createFood()"   icon="pi pi-plus" class="p-button-text"></button>
+        <button pButton pRipple label="Xong" (click)="isShowCreateFood = false"  class="p-button-text"></button>
+       
+    </ng-template>
+
+
+</p-dialog>

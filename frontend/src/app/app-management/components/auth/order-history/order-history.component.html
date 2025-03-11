@@ -1,0 +1,100 @@
+<p-toast></p-toast>
+<div class="order-history-container">
+    <button style="margin-right: 10px;" routerLink="/" class="px-4 py-2 bg-blue-500 text-white rounded">Quay về trang chủ</button>
+    <button routerLink="/auth/gio-hang" class="px-4 py-2 bg-blue-500 text-white rounded">Giỏ hàng</button>
+
+    <h2 class="text-center text-xl font-bold mb-4">Lịch sử Đơn Hàng Của <strong> {{ userInfo.fullname }} </strong></h2>
+    <div *ngIf="userInfo">
+        <p><strong>Tên khách hàng: </strong> {{ userInfo.fullname }}</p>
+        <p><strong>Email: </strong> {{ userInfo.email }}</p>
+        <p><strong>Số điện thoại: </strong> {{ userInfo.phonenumber }}</p>
+      </div>
+    <!-- <h2></h2> -->
+
+    <table *ngIf="orders.length > 0; else emptyOrders">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Ngày đặt hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let order of orders; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ order.orderTime | date: 'HH:mm:ss dd/MM/yyyy ' }}</td>
+                <td>{{ order.totalPrice | number:'1.0-2' }} VND</td>
+                <!-- <td>{{ order.status }}</td> -->
+                <td>
+                    <p-tag value="Chưa xác nhận" *ngIf = "order.status == 'unconfirmed'" severity="danger"></p-tag>
+                    <p-tag value="Đang chuẩn bị" *ngIf = "order.status=='preparing'"></p-tag>
+                    <p-tag value="Đã hủy" *ngIf = "order.status=='cancel'" severity="danger"></p-tag>
+                    <p-tag value="Đã chuẩn bị xong" *ngIf = "order.status=='done'" severity="success"></p-tag>
+                    <p-tag value="Khách hàng không nhận hàng" *ngIf = "order.status=='rejected'" severity="danger"></p-tag>
+                </td>
+                <td>
+                    <button class="btn btn-danger" 
+                            (click)="cancelOrder(order.id)" 
+                            [disabled]="!canCancelOrder(order.status)">
+                        Hủy đơn hàng
+                    </button>
+                </td>
+                
+                <td>
+                    <button class="btn btn-info" (click)="viewOrderDetails(order.id)">Xem Chi Tiết</button>
+                    <!-- <button pButton label="Xem chi tiết" icon="pi pi-eye" class="p-button-rounded p-button-info"></button> -->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <ng-template #emptyOrders>
+        <p class="empty-message">Không có đơn hàng nào.</p>
+    </ng-template>
+</div>
+
+
+<!-- Modal hiển thị danh sách món ăn -->
+<!-- Modal hiển thị chi tiết đơn hàng -->
+<div *ngIf="showDetailModal" class="modal show">
+    <div class="modal-content">
+        <h2>Chi Tiết Đơn Hàng</h2>
+
+        <table *ngIf="selectedOrderDetails.length > 0; else emptyDetails">
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Tên món</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Thành tiền</th>
+                    <th>Mô tả</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of selectedOrderDetails">
+                    <td>
+                        <img [src]="backendApiUrl +'/api/v1/project/auth/' + item.imageUrl"
+                            class="food-img" alt="Food Image">
+                    </td>
+                    <td>{{ item.foodName }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price | number:'1.0-2' }} VND</td>
+                    <td>{{ item.totalPrice | number:'1.0-2' }} VND</td>
+                    <td>{{ item.description }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ng-template #emptyDetails>
+            <p class="empty-message">Không có thông tin đơn hàng.</p>
+        </ng-template>
+
+        <button class="btn btn-danger close-btn" (click)="closeDetail()">Đóng</button>
+    </div>
+</div>
+

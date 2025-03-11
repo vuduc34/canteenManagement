@@ -1,0 +1,22 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH & Deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/canteenManagement
+            git pull origin main
+            cd backend && ./mvnw clean package -DskipTests && sudo systemctl restart springboot
+            cd frontend && npm install && npm run build -- --prod && sudo cp -r dist/sakai-ng/* /var/www/frontend/ && sudo systemctl restart nginx

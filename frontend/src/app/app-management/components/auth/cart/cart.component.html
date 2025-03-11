@@ -1,0 +1,60 @@
+<p-toast></p-toast>
+<div class="p-4">
+    <button style="margin-right: 10px;" routerLink="/" class="px-4 py-2 bg-blue-500 text-white rounded">Quay về trang chủ</button>
+    <button routerLink="/auth/lich-su" class="px-4 py-2 bg-blue-500 text-white rounded">Lịch sử mua hàng</button>
+
+    <h2 class="text-center text-xl font-bold mb-4">Giỏ Hàng Của <strong> {{ userInfo.fullname }} </strong></h2>
+    <div *ngIf="userInfo">
+        <p><strong>Tên khách hàng: </strong> {{ userInfo.fullname }}</p>
+        <p><strong>Email: </strong> {{ userInfo.email }}</p>
+        <p><strong>Số điện thoại: </strong> {{ userInfo.phonenumber }}</p>
+      </div>
+      
+    <!-- Hiển thị khi giỏ hàng trống -->
+    <div *ngIf="cartItems.length === 0" class="text-center text-gray-500 text-lg">
+        Giỏ hàng của bạn đang trống.
+        <div class="mt-4">
+            <button routerLink="/" class="px-4 py-2 bg-blue-500 text-white rounded">Quay về trang chủ</button>
+        </div>
+    </div>
+    <div *ngIf="cartItems.length > 0">
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2">STT</th>
+                    <th class="border border-gray-300 px-4 py-2">Tên sản phẩm</th>
+                    <th class="border border-gray-300 px-4 py-2">Số lượng</th>
+                    <th class="border border-gray-300 px-4 py-2">Đơn giá</th>
+                    <th class="border border-gray-300 px-4 py-2">Tổng tiền</th>
+                    <th class="border border-gray-300 px-4 py-2">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of cartItems; let i = index">
+                    <td class="border border-gray-300 px-4 py-2 text-center">{{ i + 1 }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ item.name }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-center">
+                        <button (click)="decreaseQuantity(item.id)" class="px-2 py-1 bg-red-500 text-white rounded">-</button>
+                        <span class="mx-2">{{ item.quantity }}</span>
+                        <button (click)="increaseQuantity(item.id)"
+                            class="px-2 py-1 bg-green-500 text-white rounded">+</button>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2 text-center">{{ item.price | number:'1.0-2' }} VND</td>
+                    <td class="border border-gray-300 px-4 py-2 text-center">{{ item.quantity * item.price | number:'1.0-2' }} VND</td>
+                    <td class="border border-gray-300 px-4 py-2 text-center">
+                        <button (click)="deleteCartItem(item.id)" class="px-3 py-1 bg-red-600 text-white rounded">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mt-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold">Tổng tiền: {{ totalAmount | number:'1.0-2' }} VND</h3>
+        </div>
+        <div style="top: 50%; left: 50%;" class="grid mt-4 justify-between items-center">
+            <button (click)="placeOrder()" class="px-4 py-2 bg-blue-500 text-white rounded">Đặt hàng</button>
+        </div>
+        
+    </div>
+
+</div>

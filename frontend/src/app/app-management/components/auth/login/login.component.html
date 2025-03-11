@@ -1,0 +1,36 @@
+<p-toast ></p-toast>
+<app-loading *ngIf="loading"></app-loading>
+<div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="grid justify-content-center p-2 lg:p-0" style="min-width:80%">
+        <div class="col-12 mt-5 xl:mt-0 text-center">
+            <img src="assets/layout/images/logo.svg" alt="Sakai logo" class="mb-5" style="width:81px; height:60px;">                
+        </div>
+        <div class="col-12 xl:col-6" style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="h-full w-full m-0 py-7 px-4" style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
+                <div class="text-center mb-5">
+                    <div class="text-900 text-3xl font-medium mb-3">Xin chào!</div>
+                    <span class="text-600 font-medium">Đăng nhập để tiếp tục</span>
+                </div>
+
+                <div class="w-full md:w-10 mx-auto">
+                    <label for="username" class="block text-900 text-xl font-medium mb-2">Tên đăng nhập</label>
+                    <input id="username" type="text" placeholder="Username" [(ngModel)] ="username" pInputText class="w-full mb-3" style="padding:1rem;">
+
+                    <label for="password" class="block text-900 font-medium text-xl mb-2">Mật khẩu</label>
+                    <p-password id="password" [(ngModel)]="password" placeholder="Mật khẩu" [toggleMask]="true" styleClass="w-full mb-3"></p-password>
+
+                    
+                    <div class="flex align-items-center justify-content-between mb-5">
+                        <div class="flex align-items-center">
+                            <!-- <p-checkbox id="rememberme1" [binary]="true" [(ngModel)]="rememberMe" styleClass="mr-2"></p-checkbox>
+                            <label for="rememberme1">Remember me</label> -->
+                            <a class="font-medium no-underline ml-2 text-right cursor-pointer"[routerLink]="['/auth/dang-ky']" routerLinkActive="router-link-active" style="color: var(--primary-color)">Bạn chưa có tài khoản?</a>
+                        </div>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer"[routerLink]="['/auth/quen-mat-khau']" routerLinkActive="router-link-active" style="color: var(--primary-color)">Quên mật khẩu?</a>
+                    </div>
+                    <button pButton pRipple [disabled]="!username||!password" label="Đăng nhập" (click)="login()" class="w-full p-3 text-xl"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

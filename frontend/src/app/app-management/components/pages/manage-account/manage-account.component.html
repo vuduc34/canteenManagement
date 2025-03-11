@@ -1,0 +1,239 @@
+<div class = "card">
+    <div class="grid">
+        <p-toast></p-toast>
+        <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+        <app-loading *ngIf="loading"></app-loading>
+        <div class="text-center col-12" style="font-weight: bold; font-size: large;">Danh sách tài khoản</div>
+        <p-toolbar styleClass="mb-4" class="col-12">
+            <ng-template pTemplate="left">
+                <div class="my-2">
+                    <button pButton pRipple label="Tạo  tài khoản" (click)="showCreateAccount()"  pTooltip="Tạo tài khoản" icon="pi pi-plus"
+                        class="p-button-success mr-2"[disabled]="this.role !='ROLE_ADMIN'" ></button>
+                   
+
+                </div>
+            </ng-template>
+
+        </p-toolbar>
+        <div class="col-12">
+            <p-table #dt1 [value]="listAccount" 
+                [globalFilterFields]="['id','code','name','status','email']" responsiveLayout="scroll" [rows]="10" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} bản ghi"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')"
+                                placeholder="Search keyword" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div>
+                                ID
+                                <p-columnFilter type="number" field="id" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Tên đăng nhập
+                                <p-columnFilter type="text" field="code" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                       
+                        <th>
+                            <div>
+                                Email
+                                <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Vai trò
+                                <p-columnFilter type="text" field="role" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <!-- <th>
+                            <div>
+                                Đơn vị cung cấp
+                                <p-columnFilter type="text" field="provider" display="menu"></p-columnFilter>
+                            </div>
+                        </th> -->
+                        <th>
+                            <div>
+                                Trạng thái
+                                <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <!-- <th>
+                            <div>
+                                Mã chuyến đi
+                                <p-columnFilter type="text" field="tourTripCode" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div>
+                                Trạng thái
+                                <p-columnFilter type="text" field="status" display="menu"></p-columnFilter>
+                            </div>
+                        </th> -->
+
+                       
+                        <th style="width: 3rem">
+                        </th>
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                    <tr [class]="obj.hightlightClass">
+                       
+                        <td>{{obj.id}}</td>
+                        <!-- <td>{{obj.code}}</td> -->
+                        <td>{{obj.username}}</td>
+                        <td>{{obj.email}}</td>
+                        <td> {{obj.role}}</td>
+                        <td>
+                            <p-tag value="Đã kích hoạt" *ngIf = "obj.status" severity="success"></p-tag>
+                            <p-tag value="Chưa kích hoạt" *ngIf = "!obj.status" severity="error"></p-tag>
+                        </td>
+                        <td>
+                           
+                            <button pButton pTooltip="Cập nhật thông tin tài khoản" (click)="showDetailAccount(obj)" tooltipPosition="left" pRipple type="button"
+                                label="Cập nhật"
+                                class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
+                        </td>
+                    
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="4">Không có dữ liệu</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+
+    </div>
+</div>
+
+<p-dialog [(visible)]="isShowAccountDetail" [maximizable]="true" [resizable]="false"
+    [contentStyle]="{'overflow': 'scroll'}" [responsive]="true" [draggable]="false" header="Thông tin tài khoản"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '35vw'}"
+    [modal]="true">
+
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="text-center col-12" style="font-weight: bold; font-size: large;"> Thông tin tài khoản</div>
+        
+            <div class="field col-12 lg:col-4">
+                <label for="code" style="font-weight: bold;">Mã tài khoản</label>
+                <p id="code">{{accountSelected.code}}</p>
+            </div>
+            <div class="field col-12 lg:col-4">
+                <label for="time" style="font-weight: bold;">Tên đăng nhập</label>
+                <p id="time">{{accountSelected.username}}</p>
+            </div>
+            <div class="field col-12 lg:col-4">
+                <label for="departure" style="font-weight: bold;">Email</label>
+                <p id="departure">{{accountSelected.email}}</p>
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="name" style="font-weight: bold;">Họ và tên</label>
+                <p id="name">{{accountSelected.fullname}}</p>
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="name" style="font-weight: bold;">Số điện thoại</label>
+                <p id="name">{{accountSelected.phoneNumber}}</p>
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="code" style="font-weight: bold;">Vai trò</label>
+                <p-dropdown id="code" [options]="listRole" (onChange)="changeRole()" [(ngModel)]="accountSelected.role"
+                placeholder="Cập nhật vai trò" [disabled]="this.role !='ROLE_ADMIN'"  optionLabel="name" optionValue="name"></p-dropdown>
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="code" style="font-weight: bold;">Trạng thái</label>
+                <p-dropdown id="code" [options]="status"  (onChange)="changeStatus()" [(ngModel)]="accountSelected.status"
+                placeholder="Cập nhật trạng thái"  optionLabel="name" optionValue="value"></p-dropdown>
+            </div>
+            
+        </div>
+            
+
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <!-- <button pButton pRipple label="Cập nhật"  icon="pi pi-comments" class="p-button-text"></button> -->
+        <button pButton pRipple label="Xóa" pTooltip ="Xóa tài khoản" [disabled]="this.role !='ROLE_ADMIN'" (click)="confirmDelete()"   icon="pi pi-trash" class="p-button-text"></button>
+        <button pButton pRipple label="Xong" (click)="isShowAccountDetail = false"  class="p-button-text"></button>
+       
+    </ng-template>
+
+
+</p-dialog>
+
+<p-dialog [(visible)]="isShowCreateAccount" [maximizable]="true" [resizable]="false"
+    [contentStyle]="{'overflow': 'scroll'}" [responsive]="true" [draggable]="false" header="Thông tin tài khoản"
+    [breakpoints]="{'960px': '75vw', '640px': '100vw'}" class="p-fluid" [style]="{width:'60vw', height: '35vw'}"
+    [modal]="true">
+
+    <ng-template pTemplate="content">
+        <div class="grid">
+            <div class="text-center col-12" style="font-weight: bold; font-size: large;"> Thông tin tài khoản</div>
+            
+            <div class="field col-12 lg:col-6">
+                <label for="time" style="font-weight: bold;">Tên đăng nhập</label>
+                <input id="time" pTooltip="Tên người đặt tour" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createAccountModel.userName"required autofocus placeholder="vuduc2000" />
+            </div>
+           
+            <div class="field col-12 lg:col-6">
+                <label for="name" style="font-weight: bold;">Email</label>
+                <input id="name" pTooltip="Tên người đặt tour" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createAccountModel.email"required autofocus placeholder="vuduc0501@gmail.com" />
+            </div>
+
+            <div class="field col-12 lg:col-3">
+                <label for="name" style="font-weight: bold;">Mật khẩu</label>
+                <input id="name" pTooltip="Mật khẩu" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createAccountModel.passWord"required autofocus placeholder="abcd1234" />
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="departure" style="font-weight: bold;">Tên người dùng</label>
+                <input id="name" pTooltip="Tên người dùng" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createAccountModel.fullname"required autofocus placeholder="Vũ Văn A" />
+
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="departure" style="font-weight: bold;">Số điện thoại</label>
+                <input id="name" pTooltip="Tên người dùng" tooltipPosition="bottom" pInputText
+                [(ngModel)]="createAccountModel.phoneNumber"required autofocus placeholder="Vũ Văn A" />
+
+            </div>
+            <div class="field col-12 lg:col-3">
+                <label for="code" style="font-weight: bold;">Vai trò</label>
+                <p-dropdown id="code" [options]="listRole" [(ngModel)]="roleSelected"
+                placeholder="Chọn vai trò"  optionLabel="name" optionValue="name"></p-dropdown>
+            </div>
+           
+            
+        </div>
+            
+
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <!-- <button pButton pRipple label="Cập nhật"  icon="pi pi-comments" class="p-button-text"></button> -->
+        <button pButton pRipple label="Tạo tài khoản" pTooltip ="Tạo tài khoản" (click)="createAccount()"   icon="pi pi-plus" class="p-button-text"></button>
+        <button pButton pRipple label="Xong" (click)="isShowCreateAccount = false"  class="p-button-text"></button>
+       
+    </ng-template>
+
+
+</p-dialog>

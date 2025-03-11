@@ -1,0 +1,77 @@
+
+<div class="surface-0 flex justify-content-center">
+    <div id="home" class="landing-wrapper overflow-hidden">
+        <div
+            class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
+            <a class="flex align-items-center" href="#">
+                <img src="assets/layout/images/logo.svg" alt="Logo" height="50" class="mr-0 lg:mr-2">
+                <span *ngIf="canteenInfo" class="text-900 font-medium text-2xl line-height-3 mr-8">{{ canteenInfo.data?.name }}</span>
+
+            </a>
+            <a pRipple class="cursor-pointer block lg:hidden text-700" pStyleClass="@next" enterClass="hidden"
+                leaveToClass="hidden">
+                <i class="pi pi-bars text-4xl"></i>
+            </a>
+            <div class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
+                style="top:85%">
+                <ul
+                    class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
+                    <li>
+                        <a routerLink="/" pRipple class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Trang chủ</span>
+                        </a>
+                    </li>
+                    <li>
+                        
+                        <a (click)="navigateTo('/')" fragment="features" pRipple
+                            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Giỏ hàng</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a (click)="navigateTo('/gioi-thieu')" pRipple
+                            class="flex m-0 md:ml-5 px-0 py-3 text-900 font-medium line-height-3">
+                            <span>Giới thiệu</span>
+                        </a>
+                    </li>
+                </ul>
+                <div
+                    class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
+                    
+                    <div >
+                        <button pButton pRipple (click)="navigateTo('/dang-nhap')" label="Đăng nhập"
+                            class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500">
+                        </button>
+                        <!-- <span class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500">Xin chào, {{ username }}</span> -->
+                        <button pButton pRipple (click)="navigateTo('/dang-ky')" label="Đăng ký"
+                            class="p-button-text p-button-rounded border-none font-light line-height-2 text-red-500 ml-3"
+                            >
+                        </button>
+                    </div>
+
+
+                </div>
+                <div *ngIf="canteenInfo" class="introduce-container" >
+                    <h1>{{ canteenInfo.data?.name }}</h1>
+                    <p>{{ canteenInfo.data?.adress }}</p>
+                
+                    <div class="image-container">
+                        <!-- <img src="assets/layout/images/logo.svg" alt="Logo" height="50" class="mr-0 lg:mr-2"> -->
+                    </div>
+                
+                    <div class="info">
+                        <p><strong>Địa chỉ:</strong> {{ canteenInfo.data?.adress }}</p>
+                        <p><strong>Email:</strong> {{ canteenInfo.data?.email }}</p>
+                        <p><strong>SĐT:</strong> {{ canteenInfo.data?.phone }}</p>
+                        <p><strong>Mô tả:</strong> {{ canteenInfo.data?.description }}</p>
+                        <p><strong>Thời gian mở cửa:</strong> {{ canteenInfo.data?.openTime }}</p>
+                        <!-- <p><strong>Thời gian mở cửa:</strong> {{ canteenInfo.data?.name }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ canteenInfo.data?.name }}</p> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
