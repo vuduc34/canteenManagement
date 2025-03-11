@@ -9,6 +9,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug SSH
+        run: ssh -v -o StrictHostKeyChecking=no -i <(echo "${{ secrets.SSH_PRIVATE_KEY }}") ubuntu@${{ secrets.EC2_HOST }} "echo 'SSH OK'"
+
       - name: SSH & Deploy
         uses: appleboy/ssh-action@v0.1.10
         with:
