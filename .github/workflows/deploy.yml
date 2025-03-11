@@ -19,4 +19,4 @@ jobs:
             cd /home/ubuntu/canteenManagement
             git pull origin main
             cd backend && ./mvnw clean package -DskipTests && sudo systemctl restart springboot
-            cd frontend && npm install && npm run build -- --prod && sudo cp -r dist/sakai-ng/* /var/www/frontend/ && sudo systemctl restart nginx
+            cd frontend && npm install && ng build && sudo cp -r dist/sakai-ng/* /var/www/frontend/ && sudo systemctl restart nginx
