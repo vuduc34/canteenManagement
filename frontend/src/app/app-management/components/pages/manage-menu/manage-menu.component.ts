@@ -209,6 +209,38 @@ export class ManageMenuComponent implements OnInit {
                 });
         }
     }
+
+    onFileSelectedUpdate(event: any) {
+        const file = event.target.files[0]; // Lấy file đầu tiên
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file); // API yêu cầu gửi file dưới dạng FormData
+    
+            // Gửi ảnh lên server trước
+            this.http.post<any>(environment.backendApiUrl+'/api/v1/project/auth/upload', formData)
+                .toPromise()
+                .then(response => {
+                    if (response.resultCode === 0) {
+                        // Gán giá trị imageUrl là tên file trả về từ API
+                        this.foodSelected.imageUrl = response.data;
+
+                    } else {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Tải ảnh thất bại!',
+                            detail: response.message
+                        });
+                    }
+                })
+                .catch(error => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Lỗi khi tải ảnh lên',
+                        detail: error.message
+                    });
+                });
+        }
+    }
     
     async createFood() {
         this.loading = true;
