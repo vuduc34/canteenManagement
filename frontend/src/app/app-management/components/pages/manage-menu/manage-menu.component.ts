@@ -62,7 +62,7 @@ export class ManageMenuComponent implements OnInit {
     }
 
     getAllCategories(): void {
-        const apiUrl = 'http://13.239.169.8:8080/api/v1/project/auth/category/findAll';
+        const apiUrl = environment.backendApiUrl+'/api/v1/project/auth/category/findAll';
     
         this.http.get<any[]>(apiUrl).subscribe({
           next: (data) => {
@@ -185,7 +185,7 @@ export class ManageMenuComponent implements OnInit {
             formData.append('file', file); // API yêu cầu gửi file dưới dạng FormData
     
             // Gửi ảnh lên server trước
-            this.http.post<any>('http://13.239.169.8:8080/api/v1/project/auth/upload', formData)
+            this.http.post<any>(environment.backendApiUrl+'/api/v1/project/auth/upload', formData)
                 .toPromise()
                 .then(response => {
                     if (response.resultCode === 0) {
