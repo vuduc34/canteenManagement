@@ -223,6 +223,10 @@ export class ManageMenuComponent implements OnInit {
                     if (response.resultCode === 0) {
                         // Gán giá trị imageUrl là tên file trả về từ API
                         this.foodSelected.imageUrl = response.data;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Tải ảnh thành công!'
+                        });
 
                     } else {
                         this.messageService.add({
