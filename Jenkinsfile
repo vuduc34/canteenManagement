@@ -12,20 +12,66 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to Server') {
+        stage('Approve Deployment (main)') {
+            when {
+                branch 'main'
+            }
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'dev') {
-                        deployToDevServer()
-                    } else if (env.BRANCH_NAME == 'main') {
-                        deployToProdServer()
-                    } else {
-                        error "Unknown branch, cannot determine deployment server!"
+                    emailext (
+                        subject: "Xác nhận Deploy nhánh main",
+                        body: "Có code mới trên nhánh main. Vui lòng xác nhận deploy tại Jenkins.",
+                        to: "vuvanduc0501@gmail.com"
+                    )
+
+                    def userInput = input(
+                        message: 'Có muốn deploy nhánh main không?',
+                        parameters: [
+                            booleanParam(name: 'Deploy', defaultValue: false, description: 'Chọn để xác nhận deploy')
+                        ]
+                    )
+
+                    if (!userInput) {
+                        error "Deployment bị hủy!"
                     }
                 }
             }
         }
+
+        stage('Deploy to Dev Server') {
+            when {
+                branch 'dev'
+            }
+            steps {
+                script {
+                    deployToDevServer()
+                }
+            }
+        }
+
+        stage('Deploy to Prod Server') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    deployToProdServer()
+                }
+            }
+        }
+        // stage('Deploy to Server') {
+        //     steps {
+        //         script {
+        //             if (env.BRANCH_NAME == 'dev') {
+        //                 deployToDevServer()
+        //             } else if (env.BRANCH_NAME == 'main') {
+        //                 deployToProdServer()
+        //             } else {
+        //                 error "Unknown branch, cannot determine deployment server!"
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 
