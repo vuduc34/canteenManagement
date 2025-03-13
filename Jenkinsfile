@@ -18,11 +18,7 @@ pipeline {
             }
             steps {
                 script {
-                    emailext (
-                        subject: "Xác nhận Deploy nhánh main",
-                        body: "Có code mới trên nhánh main. Vui lòng xác nhận deploy tại Jenkins.",
-                        to: "vuvanduc0501@gmail.com"
-                    )
+                    
 
                     def userInput = input(
                         message: 'Có muốn deploy nhánh main không?',
