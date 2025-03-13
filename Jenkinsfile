@@ -50,7 +50,7 @@ def deployToDevServer() {
             export NODE_OPTIONS="--max-old-space-size=4096"
             sudo cp -r dist/sakai-ng/* /var/www/frontend/
             sudo systemctl restart nginx
-            '"
+        EOF
         """
     }
 }
@@ -76,7 +76,7 @@ def deployToProdServer() {
             export NODE_OPTIONS="--max-old-space-size=4096"
             sudo cp -r dist/sakai-ng/* /var/www/frontend/
             sudo systemctl restart nginx
-            '"
+        EOF
         """
     }
 }
