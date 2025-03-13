@@ -3,6 +3,11 @@ pipeline {
     environment {
         BACKEND_DIR = "backend"
         FRONTEND_DIR = "frontend"
+        BRANCH = env.BRANCH_NAME // Lấy tên nhánh hiện tại
+    }
+     triggers {
+        // Chỉ chạy tự động nếu là nhánh "dev"
+        cron(BRANCH == 'dev' ? '15 21 * * *' : '')
     }
     stages {
         stage('Checkout Code') {
@@ -34,16 +39,16 @@ pipeline {
             }
         }
 
-        stage('Deploy to Dev Server') {
-            when {
-                branch 'dev'
-            }
-            steps {
-                script {
-                    deployToDevServer()
-                }
-            }
-        }
+        // stage('Deploy to Dev Server') {
+        //     when {
+        //         branch 'dev'
+        //     }
+        //     steps {
+        //         script {
+        //             deployToDevServer()
+        //         }
+        //     }
+        // }
 
         stage('Deploy to Prod Server') {
             when {
