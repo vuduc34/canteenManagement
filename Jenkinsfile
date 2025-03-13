@@ -44,7 +44,7 @@ def deployToDevServer() {
         # Build Frontend (Dev Mode)
         cd /home/ubuntu/canteenManagement/frontend && \
         npm install && \
-        ng build --configuration=production && \
+        ng build  && \
         export NODE_OPTIONS='--max-old-space-size=4096' && \
         sudo cp -r dist/sakai-ng/* /var/www/frontend/ && \
         sudo systemctl restart nginx
@@ -69,7 +69,7 @@ def deployToProdServer() {
         # Build Frontend (Prod Mode)
         cd /home/ubuntu/canteenManagement/frontend && \
         npm install && \
-        ng build && \
+        ng build --configuration=production && \
         export NODE_OPTIONS='--max-old-space-size=4096' && \
         sudo cp -r dist/sakai-ng/* /var/www/frontend/ && \
         sudo systemctl restart nginx
