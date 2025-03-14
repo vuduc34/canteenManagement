@@ -4,7 +4,6 @@ pipeline {
         BACKEND_DIR = "backend"
         FRONTEND_DIR = "frontend"
     }
-    
     triggers {
         githubPush()
     }
