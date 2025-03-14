@@ -28,12 +28,11 @@ pipeline {
                          message: 'Bạn có chắc chắn muốn deploy nhánh main?',
                          parameters: [
                          choice(name: 'CONFIRM_DEPLOY', choices: ['No', 'Yes'], description: 'Chọn Yes để xác nhận deploy'),
-                         text(name: 'REASON', defaultValue: 'Yes', description: 'Nhập lý do deploy')
+                         text(name: 'REASON', defaultValue: '', description: 'Nhập lý do deploy')
                         ] )
 
                      if (userInput['CONFIRM_DEPLOY'] != 'Yes') {
-                        error "🚨 Deployment bị hủy bởi người dùng!"
-                        echo " 🚨 Deployment đã được hủy với lý do: ${userInput['REASON']}"
+                        error "🚨 Deployment bị hủy bởi người dùng với lí do: ${userInput['REASON']}"
                         }
 
                          echo "✅ Deployment đã được xác nhận với lý do: ${userInput['REASON']}"
