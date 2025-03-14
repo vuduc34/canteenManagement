@@ -24,15 +24,19 @@ pipeline {
                     
 
                     def userInput = input(
-                        message: 'Có muốn deploy nhánh main không?',
-                        parameters: [
-                            booleanParam(name: 'Deploy', defaultValue: false, description: 'Chọn để xác nhận deploy')
-                        ]
-                    )
+                         id: 'DeployApproval', // ID giúp theo dõi input
+                         message: 'Bạn có chắc chắn muốn deploy nhánh main?',
+                         parameters: [
+                         choice(name: 'CONFIRM_DEPLOY', choices: ['No', 'Yes'], description: 'Chọn Yes để xác nhận deploy'),
+                         text(name: 'REASON', defaultValue: 'Yes', description: 'Nhập lý do deploy')
+                        ] )
 
-                    if (!userInput) {
-                        error "Deployment bị hủy!"
-                    }
+                     if (userInput['CONFIRM_DEPLOY'] != 'Yes') {
+                        error "🚨 Deployment bị hủy bởi người dùng!"
+                        echo " 🚨 Deployment đã được hủy với lý do: ${userInput['REASON']}"
+                        }
+
+                         echo "✅ Deployment đã được xác nhận với lý do: ${userInput['REASON']}"
                 }
             }
         }
