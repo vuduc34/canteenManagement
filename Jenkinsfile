@@ -4,9 +4,10 @@ pipeline {
         BACKEND_DIR = "backend"
         FRONTEND_DIR = "frontend"
     }
-    // triggers {
-    //     githubPush()
-    // }
+    
+    triggers {
+        githubPush()
+    }
     stages {
         stage('Checkout Code') {
             steps {
