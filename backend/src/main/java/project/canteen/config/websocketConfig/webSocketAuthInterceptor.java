@@ -27,11 +27,11 @@ public class webSocketAuthInterceptor implements HandshakeInterceptor {
             if (token != null && jwtUtil.validateToken(token)) {
                 String username = jwtUtil.getLoginFormToke(token);
                 attributes.put("username", username);
-                return true;// Lưu username vào session
+                // return true;// Lưu username vào session
 
             }
         }
-        return false; //
+        return true; //
     }
 
     @Override
