@@ -86,7 +86,7 @@ def deployToDevServer() {
         git reset --hard HEAD && \
         git clean -fd && \
         git pull origin dev && \
-        
+        chmod +x backend/mvnw && \
         # Build Backend (Dev Mode)
         cd backend && ./mvnw clean package -DskipTests && \
         sudo systemctl restart springboot && \
@@ -113,7 +113,7 @@ def deployToProdServer() {
         git reset --hard HEAD && \
         git clean -fd && \
         git pull origin main && \
-        
+        chmod +x backend/mvnw && \
         # Build Backend (Prod Mode)
         cd backend && ./mvnw clean package -DskipTests && \
         sudo systemctl restart springboot && \
