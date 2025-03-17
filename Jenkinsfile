@@ -83,6 +83,8 @@ def deployToDevServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
+        git reset --hard HEAD && \
+        git clean -fd && \
         git pull origin dev && \
         
         # Build Backend (Dev Mode)
@@ -108,6 +110,8 @@ def deployToProdServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
+        git reset --hard HEAD && \
+        git clean -fd && \
         git pull origin main && \
         
         # Build Backend (Prod Mode)
