@@ -83,8 +83,6 @@ def deployToDevServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
-        git reset --hard HEAD && \
-        git clean -fd && \
         git pull origin dev && \
         chmod +x backend/mvnw && \
         # Build Backend (Dev Mode)
@@ -94,8 +92,8 @@ def deployToDevServer() {
         # Build Frontend (Dev Mode)
         cd /home/ubuntu/canteenManagement/frontend && \
         npm install && \
-        ng build  && \
         export NODE_OPTIONS='--max-old-space-size=4096' && \
+        ng build  && \
         sudo cp -r dist/sakai-ng/* /var/www/frontend/ && \
         sudo systemctl restart nginx
     "
@@ -110,8 +108,6 @@ def deployToProdServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
-        git reset --hard HEAD && \
-        git clean -fd && \
         git pull origin main && \
         chmod +x backend/mvnw && \
         # Build Backend (Prod Mode)
@@ -121,8 +117,8 @@ def deployToProdServer() {
         # Build Frontend (Prod Mode)
         cd /home/ubuntu/canteenManagement/frontend && \
         npm install && \
-        ng build --configuration=production && \
         export NODE_OPTIONS='--max-old-space-size=4096' && \
+        ng build --configuration=production && \
         sudo cp -r dist/sakai-ng/* /var/www/frontend/ && \
         sudo systemctl restart nginx
     "
