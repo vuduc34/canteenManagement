@@ -9,7 +9,7 @@ export class AuthGuardAdmin implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (this.authService.getRole() == "ROLE_ADMIN") {
+        if (this.authService.getRole() == "ROLE_ADMIN" ) {
             return true;
         }
         else {

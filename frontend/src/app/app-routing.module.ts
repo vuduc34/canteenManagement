@@ -32,6 +32,7 @@ import { NotfoundComponent } from './app-management/components/notfound/notfound
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './app-management/service/auth-guard';
 import { IntroduceComponent } from './app-management/components/introduce/introduce.component';
+import { AuthGuardStaff } from './app-management/service/authGuard-Staff';
 
 // Định nghĩa danh sách tuyến đường (routes)
 const routes: Routes = [
@@ -44,7 +45,7 @@ const routes: Routes = [
             { 
                 path: 'dashboard', 
                 loadChildren: () => import('./app-management/components/dashboard/dashboard.module').then(m => m.DashboardModule),
-                canActivate: [AuthGuard] 
+                canActivate: [AuthGuard,AuthGuardStaff] 
             },
             { 
                 path: '', 
