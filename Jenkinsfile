@@ -83,8 +83,10 @@ def deployToDevServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
+        git reset --hard HEAD && \
+        git clean -fd && \
         git pull origin dev && \
-        
+        chmod +x backend/mvnw && \
         # Build Backend (Dev Mode)
         cd backend && ./mvnw clean package -DskipTests && \
         sudo systemctl restart springboot && \
@@ -108,8 +110,10 @@ def deployToProdServer() {
        sh """
     ssh -o StrictHostKeyChecking=no ${SERVER_IP} "
         cd /home/ubuntu/canteenManagement && \
+        git reset --hard HEAD && \
+        git clean -fd && \
         git pull origin main && \
-        
+        chmod +x backend/mvnw && \
         # Build Backend (Prod Mode)
         cd backend && ./mvnw clean package -DskipTests && \
         sudo systemctl restart springboot && \
