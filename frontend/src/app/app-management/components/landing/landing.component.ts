@@ -351,6 +351,32 @@ import { infoShopModel } from '../../Model/infoShopModel';
             .notification-container li:last-child {
                 border-bottom: none;
             }
+            .upload-container {
+                 position: relative;
+                     display: inline-block;
+            }
+
+            .upload-container input[type="file"] {
+            opacity: 0;
+            width: 150px;
+            height: 40px;
+            position: absolute;
+            cursor: pointer;
+            }
+
+            .upload-container label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #084cdf;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+            }
+
+            .upload-container label:hover {
+            background-color: #0d45a5;
+            }
         `,
     ],
 })
@@ -495,6 +521,7 @@ export class LandingComponent implements OnInit {
             phone: this.infoShop.phone,
             description: this.infoShop.description,
             openTime: this.infoShop.openTime,
+            imageUrl: this.infoShop.imageUrl
         };
 
         await this.http
@@ -658,5 +685,41 @@ export class LandingComponent implements OnInit {
     // Ngắt kết nối
     disconnect() {
         this.stompClient.deactivate();
+    }
+
+    onFileSelectedUpdate(event: any) {
+        const file = event.target.files[0]; // Lấy file đầu tiên
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file); // API yêu cầu gửi file dưới dạng FormData
+    
+            // Gửi ảnh lên server trước
+            this.http.post<any>(environment.backendApiUrl+'/api/v1/project/auth/upload', formData)
+                .toPromise()
+                .then(response => {
+                    if (response.resultCode === 0) {
+                        // Gán giá trị imageUrl là tên file trả về từ API
+                        this.infoShop.imageUrl = response.data;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Tải ảnh thành công!'
+                        });
+    
+                    } else {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Tải ảnh thất bại!',
+                            detail: response.message
+                        });
+                    }
+                })
+                .catch(error => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Lỗi khi tải ảnh lên',
+                        detail: error.message
+                    });
+                });
+        }
     }
 }

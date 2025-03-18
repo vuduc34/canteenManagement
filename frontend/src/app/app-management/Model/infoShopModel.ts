@@ -5,4 +5,5 @@ export interface infoShopModel {
     phone?: string;
     description?: string;
     openTime?: string;
+    imageUrl?:string;
 }
