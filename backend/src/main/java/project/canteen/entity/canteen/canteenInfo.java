@@ -25,6 +25,8 @@ public class canteenInfo {
     private  String description;
     @Column
     private String openTime;
+    @Column
+    private String imageUrl;
 
 
 }

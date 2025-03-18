@@ -25,6 +25,7 @@ public class CanteenInfoService {
                 current.setEmail(canteenInfo.getEmail());
                 current.setPhone(canteenInfo.getPhone());
                 current.setOpenTime(canteenInfo.getOpenTime());
+                current.setImageUrl(canteenInfo.getImageUrl());
                 canteenInfoRepositry.save(current);
             }
             responMessage.setResultCode(constant.RESULT_CODE.SUCCESS);

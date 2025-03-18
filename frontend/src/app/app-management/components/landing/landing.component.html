@@ -88,7 +88,7 @@
                     </div>
 
                     <figure>
-                        <img class="cta-banner__img cd-radius-md" src="assets/demo/images/banner/banner.jpg"
+                        <img class="cta-banner__img cd-radius-md" [src]="backendApiUrl +'/api/v1/project/auth/'+infoShop.imageUrl"
                             alt="Banner">
                     </figure>
                 </div>
@@ -202,6 +202,21 @@
                     <label for="departure" style="font-weight: bold">Thời gian hoạt động</label>
                     <input id="name" pTooltip="Thời gian hoạt động" tooltipPosition="bottom" pInputText
                         [(ngModel)]="infoShop.openTime" required autofocus />
+                </div>
+                <div class="field col-12 lg:col-6">
+                    <label for="foodImage" style="font-weight: bold;">Hình ảnh</label>
+                
+                    <!-- Thiết kế ô tải file -->
+                    <div class="upload-container">
+                        <input id="foodImage" type="file" (change)="onFileSelectedUpdate($event)" accept="image/*" required />
+                        <label for="foodImage">Chọn hình ảnh</label>
+                    </div>
+                
+                    <!-- Hiển thị ảnh đã chọn -->
+                    <!-- <div class="image-preview" *ngIf="createFoodModel.imageUrl">
+                        <img [src]="backendApiUrl +'/api/v1/project/auth/' + createFoodModel.imageUrl"
+                            alt="Ảnh món ăn">
+                    </div> -->
                 </div>
             </div>
         </ng-template>
