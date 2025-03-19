@@ -7,13 +7,13 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class FoodService {
-  private apiUrl = environment.backendApiUrl+ '/api/v1/project/auth/food/findAllAvailable';
+  private apiUrl = environment.backendApiUrl+'/api/v1/project/auth/food/findFilter?text=';
 
   constructor(private http: HttpClient) {}
 
   // ✅ Hàm lấy danh sách món ăn từ API
-  getAllFoods(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  getAllFoods(text: String): Observable<any> {
+    return this.http.get<any>(this.apiUrl+text);
   }
 
   

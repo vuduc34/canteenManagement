@@ -25,6 +25,12 @@ public class foodController {
         return foodService.findAllAvailable();
     }
 
+    @GetMapping("/food/findFilter")
+    @ResponseBody
+    public ResponMessage findFilter(@RequestParam(defaultValue = "") String text) {
+        return foodService.findFilter(text);
+    }
+
     @GetMapping("/food/findAllPageable")
     @ResponseBody
     public ResponMessage findAllPageable(

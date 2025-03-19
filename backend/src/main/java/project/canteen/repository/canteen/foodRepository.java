@@ -25,6 +25,9 @@ public interface foodRepository extends JpaRepository<foodItem, Long> {
 
     @Query(value = "SELECT * from food_item where status = 'available'", nativeQuery = true)
     List<foodItem> findAllAvailable();
+
+    @Query(value = "SELECT * from food_item where status = 'available' and `name` like %:text% order by price ", nativeQuery = true)
+    List<foodItem> findFilter(@Param("text") String text);
     @Query(value = "SELECT * from food_item where status != 'deleted'", nativeQuery = true)
     List<foodItem> findAllFood();
 }

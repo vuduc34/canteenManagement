@@ -44,6 +44,14 @@ public class foodService {
         return responMessage;
     }
 
+    public ResponMessage findFilter(String text) {
+        ResponMessage responMessage = new ResponMessage();
+        responMessage.setResultCode(constant.RESULT_CODE.SUCCESS);
+        responMessage.setMessage(constant.MESSAGE.SUCCESS);
+        responMessage.setData(foodRepository.findFilter(text));
+        return responMessage;
+    }
+
     public ResponMessage findAllPageable(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         ResponMessage responMessage = new ResponMessage();
