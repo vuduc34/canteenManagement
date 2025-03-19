@@ -16,6 +16,7 @@ public class constant {
         public static  final String CANCEL = "cancel";
         public static final String REJECTED = "rejected";
         public static final String DELETEED = "deleted";
+        public static final String PAID = "paid";
     }
 
     public static final class RESULT_CODE {

@@ -44,7 +44,6 @@ export function HttpLoaderFactory(http: HttpClient) {
           },
         }),
     ],
-    
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
       AuthGuard,JwtHelperService,AuthGuardAdmin,AuthGuardStaff,{ provide: JWT_OPTIONS, useValue: JWT_OPTIONS },

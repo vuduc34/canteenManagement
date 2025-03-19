@@ -32,6 +32,13 @@ public class orderController {
         return orderService.preparingOrder(orderId,token);
     }
 
+    @PutMapping(value = "/order/paid")
+    @ResponseBody
+    @PreAuthorize("hasRole('ROLE_STAFF')")
+    public ResponMessage paidOrder(@RequestParam Long orderId,@RequestHeader("Authorization") String token) {
+        return orderService.payOrder(orderId,token);
+    }
+
     @PutMapping(value = "/order/rejected")
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_STAFF')")
@@ -91,7 +98,7 @@ public class orderController {
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_STAFF')")
     public ResponMessage getTotalDoneOrdersToday() {
-        return orderService.getTotalOrdersTodayByStatus(constant.STATUS.DONE);
+        return orderService.getTotalOrdersTodayByStatus(constant.STATUS.PAID);
     }
 
     @GetMapping(value = "/order/getTotalPreparingOrdersToday")

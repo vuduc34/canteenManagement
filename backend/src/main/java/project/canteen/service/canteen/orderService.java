@@ -382,6 +382,38 @@ public class orderService {
         return responMessage;
     }
 
+    public ResponMessage payOrder(Long orderId,String token) {
+        ResponMessage responMessage = new ResponMessage();
+        try{
+            order order = orderRepository.findOrderById(orderId);
+            if(order == null) {
+                responMessage.setResultCode(constant.RESULT_CODE.ERROR);
+                responMessage.setMessage(constant.MESSAGE.ERROR);
+                responMessage.setData("Not found order id = "+orderId);
+            } else if(order.getStatus().equals(constant.STATUS.DONE)) {
+                order.setStatus(constant.STATUS.PAID);
+                orderRepository.save(order);
+                String username = jwtProvider.getLoginFormToke(token);
+                account account = accountRepository.findUserByUsername(username);
+                action action = actionRepository.findActionByName(constant.ACTION.DONE);
+                actionDetail actionDetail = new actionDetail();
+                actionDetail.setAction(action);
+                actionDetail.setOrder_id(orderId);
+                actionDetail.setAccount_id(account.getId());
+                actionDetailRepository.save(actionDetail);
+                webSocketService.sendNotificationToUser(order.getAccount().getUsername(),"paidOrder");
+                responMessage.setResultCode(constant.RESULT_CODE.SUCCESS);
+                responMessage.setMessage(constant.MESSAGE.SUCCESS);
+                responMessage.setData(order.toResponse());
+            }
+        } catch (Exception e) {
+            responMessage.setResultCode(constant.RESULT_CODE.ERROR);
+            responMessage.setMessage(constant.MESSAGE.ERROR);
+            responMessage.setData(e.getMessage());
+        }
+        return responMessage;
+    }
+
     public ResponMessage rejectOrder(Long orderId,String token) {
         ResponMessage responMessage = new ResponMessage();
         try{

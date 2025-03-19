@@ -88,6 +88,7 @@
                             <p-tag value="Đang chuẩn bị" *ngIf = "obj.status=='preparing'"></p-tag>
                             <p-tag value="Đã hủy" *ngIf = "obj.status=='cancel'" severity="danger"></p-tag>
                             <p-tag value="Đã chuẩn bị xong" *ngIf = "obj.status=='done'" severity="success"></p-tag>
+                            <p-tag value="Đã thanh toán" *ngIf = "obj.status=='paid'" severity="success"></p-tag>
                             <p-tag value="Khách hàng không nhận hàng" *ngIf = "obj.status=='rejected'" severity="danger"></p-tag>
                         </td>
                         <td>{{obj.code}}</td>
@@ -160,7 +161,8 @@
         <button pButton pRipple label="Xác nhận" *ngIf="orderSelected.status == 'unconfirmed'" (click)="confirmOrder()"  icon="pi pi-check-circle" class="p-button-text"></button>
         <button pButton pRipple label="Hoàn thành" *ngIf="orderSelected.status == 'preparing'" (click)="doneOrder()"  icon="pi pi-save" class="p-button-text"></button>
         <button pButton pRipple label="Hủy" *ngIf="orderSelected.status == 'unconfirmed'" (click) ="confirmCancel()" icon="pi pi-minus-circle"  class="p-button-text"></button>
-        <button pButton pRipple label="Khách hàng không lấy đơn" [disabled] ="checkTimeDifference(orderSelected.orderTime)" *ngIf="orderSelected.status == 'done'" (click) ="confirmReject()" icon="pi pi-minus-circle"  class="p-button-text"></button>
+        <button pButton pRipple label="Đã thanh toán" *ngIf="orderSelected.status == 'done'" (click) ="paidOrder()" icon="pi pi-minus-circle"  class="p-button-text"></button>
+        <button pButton pRipple label="Khách hàng không lấy đơn" *ngIf="orderSelected.status == 'done'" (click) ="confirmReject()" icon="pi pi-minus-circle"  class="p-button-text"></button>
     </ng-template>
 
 

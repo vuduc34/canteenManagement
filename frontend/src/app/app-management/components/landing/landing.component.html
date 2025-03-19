@@ -94,8 +94,12 @@
                 </div>
             </section>
         </div>
-
-
+        <div class="py-4 px-4 lg:px-8 mt-5 mx-0 lg:mx-8 grid">
+            <input class="col-8" pInputText [(ngModel)]="text" type="text" pSize="large" placeholder="Tìm kiếm" />
+            <button pButton  pRipple type="button" (click)="loadFoods()"
+            label="Tìm kiếm" severity="success" class="ml-1 col-3"></button>
+            <!-- <p-button label="Success" class="col-4" severity="success" /> -->
+        </div>
         <div class="container mt-5">
             <div class="row justify-content-center" id="datmonan">
                 <div class="col-12 text-center mb-4">

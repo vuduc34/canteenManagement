@@ -254,6 +254,40 @@ export class ManageOrderComponent implements OnInit {
           }
       );
     }
+    async paidOrder() {
+        await this.http
+        .put<ResponseMessage>(environment.backendApiUrl+'/api/v1/project/order/paid?orderId='+this.orderSelected.id, null,{
+            headers: this.header,
+        }).toPromise()
+        .then(
+            (data) => {
+                if (data?.resultCode == 0) {
+                  this.messageService.add({
+                    severity: 'success',
+                    summary: "Đơn hàng đã thanh toán",
+                });
+                    this.loadData();
+                    this.isShowOrderDetail = false;
+                    // console.log(this.listAccount);
+                } else {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: data?.message,
+                    });
+                }
+              //   console.log(data)
+            },
+            (error) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error occur',
+                });
+            }
+        );
+      }
+
+
+
     confirmCancel() {
       this.confirmationService.confirm({
         message: 'Xác nhận hủy đơn hàng?',

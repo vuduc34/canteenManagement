@@ -31,6 +31,7 @@
                 <td>
                     <p-tag value="Chưa xác nhận" *ngIf = "order.status == 'unconfirmed'" severity="danger"></p-tag>
                     <p-tag value="Đang chuẩn bị" *ngIf = "order.status=='preparing'"></p-tag>
+                    <p-tag value="Đã thanh toán" *ngIf = "order.status=='paid'" severity="sucess"></p-tag>
                     <p-tag value="Đã hủy" *ngIf = "order.status=='cancel'" severity="danger"></p-tag>
                     <p-tag value="Đã chuẩn bị xong" *ngIf = "order.status=='done'" severity="success"></p-tag>
                     <p-tag value="Khách hàng không nhận hàng" *ngIf = "order.status=='rejected'" severity="danger"></p-tag>
